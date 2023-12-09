@@ -1,0 +1,93 @@
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.HashMap;
+
+public class MainActivity extends AppCompatActivity {
+
+    private HashMap<String, String> eventos = new HashMap<>();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        final EditText inputEditText = findViewById(R.id.inputEditText);
+        final TextView outputTextView = findViewById(R.id.outputTextView);
+        final DatePicker datePicker = findViewById(R.id.datePicker);
+        Button addButton = findViewById(R.id.addButton);
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String fecha = datePicker.getDayOfMonth() + "/" + (datePicker.getMonth() + 1) + "/" + datePicker.getYear();
+                String detalle = inputEditText.getText().toString();
+
+                // Agregar evento al HashMap
+                eventos.put(fecha, detalle);
+
+                // Limpiar entrada
+                inputEditText.setText("");
+
+                // Actualizar salida
+                actualizarSalida();
+            }
+        });
+    }
+
+    private void actualizarSalida() {
+        StringBuilder resultado = new StringBuilder();
+        for (String fecha : eventos.keySet()) {
+            resultado.append(fecha).append(": ").append(eventos.get(fecha)).append("\n");
+        }
+
+        TextView outputTextView = findViewById(R.id.outputTextView);
+        outputTextView.setText(resultado.toString());
+    }
+}
+-----------------------------------------------------------------------
+
+<!-- activity_main.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <DatePicker
+        android:id="@+id/datePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        
+
+    <EditText
+        android:id="@+id/inputEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/datePicker"
+        android:hint="Enter event details" />
+
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inputEditText"
+        android:layout_centerHorizontal="true"
+        
+        android:text="Add Event" />
+
+    <TextView
+        android:id="@+id/outputTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addButton"
+        android:layout_centerHorizontal="true"
+        
+</RelativeLayout>
